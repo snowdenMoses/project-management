@@ -1,0 +1,51 @@
+{
+  "name": "node_graphql_server_with_prisma",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "concurrently -k \"tsc -w\" \"nodemon ./dist/server.js\"",
+    "prod": "node ./dist/server.js",
+    "build": "tsc",
+    "createSeeder": "concurrently -k \"tsc -w\" \"node ./dist/seeds/create_seeder.js\"",
+    "removeSeeder": "concurrently -k \"tsc -w\" \"node ./dist/seeds/remove_seeder.js\""
+  },
+  "dependencies": {
+    "@apollo/server": "^4.7.1",
+    "@prisma/client": "^4.13.0",
+    "@types/aws-sdk": "^2.7.0",
+    "@types/bcryptjs": "^2.4.2",
+    "@types/graphql-upload": "^16.0.0",
+    "@types/jsonwebtoken": "^9.0.2",
+    "@types/uuid": "^9.0.1",
+    "apollo-server-express": "^3.12.0",
+    "aws-sdk": "^2.1384.0",
+    "bcrypt": "^5.1.0",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dataloader": "^2.2.2",
+    "express": "^4.18.2",
+    "graphql": "^16.6.0",
+    "graphql-shield": "^7.6.5",
+    "graphql-subscriptions": "^2.0.0",
+    "graphql-upload": "^16.0.2",
+    "graphql-yoga": "^3.9.1",
+    "http": "^0.0.1-security",
+    "jsonwebtoken": "^9.0.0",
+    "prisma": "^4.13.0",
+    "uuid": "^9.0.0",
+    "uuidv4": "^6.2.13"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^8.0.0",
+    "@types/node": "^18.16.15",
+    "concurrently": "^8.0.1",
+    "nodemon": "^2.0.22",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
