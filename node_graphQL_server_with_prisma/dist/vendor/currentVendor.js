@@ -11,8 +11,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const server_1 = require("../server");
 const currentUser = (userId) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield server_1.prisma.vendor.findUnique({ where: {
+    return yield server_1.prisma.client.findUnique({
+        where: {
             id: userId
-        } });
+        }
+    });
 });
 exports.default = currentUser;

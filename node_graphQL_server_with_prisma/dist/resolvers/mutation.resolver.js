@@ -24,42 +24,42 @@ exports.Mutation = {
             return { filename, mimetype, encoding };
         });
     },
-    createVendor(parent, args, ctx, info) {
+    createclient(parent, args, ctx, info) {
         return __awaiter(this, void 0, void 0, function* () {
             let password = "";
             args.data.password = yield bcrypt_1.default.hash(args.data.password, 10);
-            const emailExist = yield server_1.prisma.vendor.findUnique({ where: { email: args.data.email } });
+            const emailExist = yield server_1.prisma.client.findUnique({ where: { email: args.data.email } });
             if (emailExist)
                 throw new Error("Email Already Exist");
-            const vendor = yield server_1.prisma.vendor.create({
+            const client = yield server_1.prisma.client.create({
                 data: Object.assign({}, args.data)
             });
-            return vendor;
+            return client;
         });
     },
     login(parent, args, ctx, info) {
         return __awaiter(this, void 0, void 0, function* () {
-            const vendorDetails = yield server_1.prisma.vendor.findUnique({
+            const clientDetails = yield server_1.prisma.client.findUnique({
                 where: {
                     email: args.data.email
                 }
             });
-            if (!vendorDetails)
+            if (!clientDetails)
                 return "Please Check Your Password or Email";
-            const isUser = yield bcrypt_1.default.compare(args.data.password, vendorDetails ? vendorDetails.password : "");
+            const isUser = yield bcrypt_1.default.compare(args.data.password, clientDetails ? clientDetails.password : "");
             if (!isUser)
                 throw new Error("Login Details not correct");
             const token = jsonwebtoken_1.default.sign({
-                userId: vendorDetails === null || vendorDetails === void 0 ? void 0 : vendorDetails.id
+                userId: clientDetails === null || clientDetails === void 0 ? void 0 : clientDetails.id
             }, 'secret', { expiresIn: 60 * 60 });
-            return { vendorDetails, token, message: "You have successfully Logged in" };
+            return { clientDetails, token, message: "You have successfully Logged in" };
         });
     },
-    createProduct(parent, args, ctx, info) {
+    createproject(parent, args, ctx, info) {
         return __awaiter(this, void 0, void 0, function* () {
-            const product = yield server_1.prisma.product.create({
+            const project = yield server_1.prisma.project.create({
                 data: {
-                    vendor_id: args === null || args === void 0 ? void 0 : args.vendor_id,
+                    client_id: args === null || args === void 0 ? void 0 : args.client_id,
                     name: args.data.name,
                     description: args.data.description,
                     price: args.data.price,
@@ -70,14 +70,14 @@ exports.Mutation = {
             console.log("Stream", stream);
             (0, aws_1.default)(args.data.imageFile);
             for (let i = 0; i < args.data.categories.length; i++) {
-                yield server_1.prisma.categoryProduct.create({
+                yield server_1.prisma.categoryproject.create({
                     data: {
-                        product_id: product === null || product === void 0 ? void 0 : product.id,
+                        project_id: project === null || project === void 0 ? void 0 : project.id,
                         category_id: args.data.categories[i]
                     }
                 });
             }
-            return product;
+            return project;
         });
     },
     createCategory(parent, args, ctx, info) {
@@ -90,33 +90,33 @@ exports.Mutation = {
             return { category, message: "Successful" };
         });
     },
-    deleteProduct(parent, args, ctx, info) {
+    deleteproject(parent, args, ctx, info) {
         return __awaiter(this, void 0, void 0, function* () {
-            const productExist = yield server_1.prisma.product.findUnique({ where: { id: args.id } });
-            if (!productExist)
-                throw new Error("Product does not exist");
-            const product = yield server_1.prisma.product.delete({
+            const projectExist = yield server_1.prisma.project.findUnique({ where: { id: args.id } });
+            if (!projectExist)
+                throw new Error("project does not exist");
+            const project = yield server_1.prisma.project.delete({
                 where: {
                     id: args.id
                 }
             });
-            return product;
+            return project;
         });
     },
-    updateVendor(parent, args, ctx, info) {
+    updateclient(parent, args, ctx, info) {
         return __awaiter(this, void 0, void 0, function* () {
-            const VendorExist = yield server_1.prisma.vendor.findUnique({ where: { id: args.id } });
+            const clientExist = yield server_1.prisma.client.findUnique({ where: { id: args.id } });
             if (args.data.password) {
                 args.data.password = yield bcrypt_1.default.hash(args.data.password, 10);
             }
-            if (!VendorExist)
-                throw new Error("Vendor does not exist");
-            const vendor = yield server_1.prisma.vendor.update({
+            if (!clientExist)
+                throw new Error("client does not exist");
+            const client = yield server_1.prisma.client.update({
                 where: {
                     id: args.id
                 }, data: Object.assign({}, args.data)
             });
-            return vendor;
+            return client;
         });
     },
 };

@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const faker_1 = require("@faker-js/faker");
 const server_1 = require("../server");
-function createRandomVendors() {
+function createRandomclients() {
     return {
         first_name: faker_1.faker.person.firstName(),
         last_name: faker_1.faker.person.lastName(),
@@ -19,34 +19,34 @@ function createRandomVendors() {
         password: faker_1.faker.internet.password(),
     };
 }
-function createRandomProducts(vendor_id) {
+function createRandomprojects(client_id) {
     return {
-        name: faker_1.faker.commerce.productName(),
-        description: faker_1.faker.commerce.productDescription(),
+        name: faker_1.faker.commerce.projectName(),
+        description: faker_1.faker.commerce.projectDescription(),
         price: Number(faker_1.faker.commerce.price()),
-        vendor_id: vendor_id,
+        client_id: client_id,
     };
 }
-function createVendors(callback) {
+function createclients(callback) {
     return __awaiter(this, void 0, void 0, function* () {
-        const vendors = faker_1.faker.helpers.multiple(createRandomVendors, {
+        const clients = faker_1.faker.helpers.multiple(createRandomclients, {
             count: 20,
         });
-        yield server_1.prisma.vendor.createMany({ data: vendors });
+        yield server_1.prisma.client.createMany({ data: clients });
         callback();
     });
 }
-function createProducts() {
+function createprojects() {
     return __awaiter(this, void 0, void 0, function* () {
         console.log("Starting.......");
-        const allVendors = yield server_1.prisma.vendor.findMany();
-        const arrayOfVendorsId = allVendors.map(vendor => vendor.id);
-        for (let i = 0; i < arrayOfVendorsId.length; i++) {
-            yield server_1.prisma.product.create({
-                data: createRandomProducts(arrayOfVendorsId[i])
+        const allclients = yield server_1.prisma.client.findMany();
+        const arrayOfclientsId = allclients.map(client => client.id);
+        for (let i = 0; i < arrayOfclientsId.length; i++) {
+            yield server_1.prisma.project.create({
+                data: createRandomprojects(arrayOfclientsId[i])
             });
         }
         console.log("Completed!!!!");
     });
 }
-createVendors(createProducts);
+createclients(createprojects);

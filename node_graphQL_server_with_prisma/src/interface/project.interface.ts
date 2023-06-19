@@ -1,7 +1,7 @@
 
-export interface IProduct{
+export interface Iproject {
     name: string
     description: string
     price: number
-    vendor_id: string
+    client_id: string
 }

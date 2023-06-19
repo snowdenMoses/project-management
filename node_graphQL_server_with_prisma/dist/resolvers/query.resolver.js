@@ -12,30 +12,30 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Query = void 0;
 const server_1 = require("../server");
 exports.Query = {
-    vendor(parent, { id }, ctx, info) {
+    client(parent, { id }, ctx, info) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield server_1.prisma.vendor.findUnique({ where: { id } });
+            return yield server_1.prisma.client.findUnique({ where: { id } });
         });
     },
-    currentVendor(_, __, { currenUserId }, info) {
+    currentclient(_, __, { currenUserId }, info) {
         return __awaiter(this, void 0, void 0, function* () {
             // if (currenUserId) {
             //     try {
-            return yield server_1.prisma.vendor.findUnique({ where: { id: currenUserId } });
+            return yield server_1.prisma.client.findUnique({ where: { id: currenUserId } });
             //     }
             //     catch (err) {
             //     }
             // }
         });
     },
-    vendors() {
+    clients() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield server_1.prisma.vendor.findMany();
+            return yield server_1.prisma.client.findMany();
         });
     },
-    products() {
+    projects() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield server_1.prisma.product.findMany({
+            return yield server_1.prisma.project.findMany({
                 orderBy: {
                     created_at: "desc"
                 }

@@ -22,7 +22,7 @@ const body_parser_1 = require("body-parser");
 const cors_1 = __importDefault(require("cors"));
 const typeDef_1 = require("./typeDef/typeDef");
 const resolvers_1 = require("./resolvers");
-const vendorIdFromToken_1 = __importDefault(require("./authentication/vendorIdFromToken"));
+const clientIdFromToken_1 = __importDefault(require("./authentication/clientIdFromToken"));
 const shield_1 = require("./shield/shield");
 const port = process.env.PORT || 4000;
 exports.prisma = new client_1.PrismaClient();
@@ -41,7 +41,7 @@ function serverFunction() {
             context: ({ req }) => __awaiter(this, void 0, void 0, function* () {
                 const bearerToken = String(req.headers.authorization);
                 const token = bearerToken.split("Bearer ")[1];
-                const currenUserId = yield (0, vendorIdFromToken_1.default)(token);
+                const currenUserId = yield (0, clientIdFromToken_1.default)(token);
                 return {
                     currenUserId: currenUserId === null || currenUserId === void 0 ? void 0 : currenUserId.userId
                 };

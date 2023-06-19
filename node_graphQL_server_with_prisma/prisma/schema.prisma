@@ -10,7 +10,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Vendor{
+model Client{
     id String @id @default(uuid())
     first_name String
     last_name String
@@ -18,48 +18,19 @@ model Vendor{
     created_at DateTime? @default(now())
     updated_at DateTime? @updatedAt
     password String
-    products Product[]
+    phone_number String
+    projects Project[]
 
-  @@map("vendors")
+  @@map("clients")
 }
-model Product{
+model Project{
     id String @id @default(uuid())
     name String
     description String
-    price Float 
+    duration Int 
     created_at DateTime? @default(now())
     updated_at DateTime? @updatedAt
-    images Image[]
-    categories CategoryProduct[]
-    vendor Vendor @relation(fields: [vendor_id], references: [id])
-    vendor_id String
-  @@map("products")
-}
-model Image{
-    id String @id @default(uuid())
-    url String
-    product Product @relation(fields: [product_id], references: [id])
-    product_id String
-    created_at DateTime? @default(now())
-    updated_at DateTime? @updatedAt
-  @@map("images")
-}
-model Category{
-    id String @id @default(uuid())
-    name String @unique
-    products CategoryProduct[]
-    created_at DateTime? @default(now())
-    updated_at DateTime? @updatedAt
-  @@map("categories")
-}
-model CategoryProduct{
-    category_id String
-    category Category @relation(fields: [category_id], references: [id])
-    product_id String
-    product Product @relation(fields: [product_id], references: [id])
-    created_at DateTime? @default(now())
-    updated_at DateTime? @updatedAt
-
-  @@map("categories_products")
-  @@id([category_id,product_id])
+    client Client @relation(fields: [client_id], references: [id])
+    client_id String
+  @@map("projects")
 }

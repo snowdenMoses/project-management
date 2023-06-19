@@ -8,7 +8,7 @@ import { json, text } from 'body-parser';
 import cors from 'cors';
 import { typeDefs } from "./typeDef/typeDef";
 import { resolvers } from "./resolvers";
-import vendorIdFromToken from "./authentication/vendorIdFromToken";
+import clientIdFromToken from "./authentication/clientIdFromToken";
 import { permissions } from "./shield/shield";
 
 
@@ -24,23 +24,23 @@ const server = new ApolloServer({
     resolvers,
     plugins: [permissions],
     csrfPrevention: false
-    
+
 });
-async function serverFunction(){
+async function serverFunction() {
     await server.start();
     app.use(
         cors(),
         json(),
-        text({type: 'application/graphql'}),
+        text({ type: 'application/graphql' }),
         expressMiddleware(server, {
-            context: async ({ req }) => { 
+            context: async ({ req }) => {
                 const bearerToken = String(req.headers.authorization)
                 const token = bearerToken.split("Bearer ")[1]
-                const currenUserId = await vendorIdFromToken(token)
+                const currenUserId = await clientIdFromToken(token)
                 return {
-                            currenUserId: currenUserId?.userId
-                        }
-             },
+                    currenUserId: currenUserId?.userId
+                }
+            },
         }),
     );
     await new Promise<void>((resolve) => httpServer.listen({ port }, resolve));

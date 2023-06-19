@@ -10,16 +10,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const server_1 = require("../server");
-function dropVendors() {
+function dropclients() {
     return __awaiter(this, void 0, void 0, function* () {
-        yield server_1.prisma.vendor.deleteMany();
+        yield server_1.prisma.client.deleteMany();
     });
 }
-function dropProducts() {
+function dropprojects() {
     return __awaiter(this, void 0, void 0, function* () {
-        yield server_1.prisma.product.deleteMany();
+        yield server_1.prisma.project.deleteMany();
     });
 }
-dropProducts();
-dropVendors();
+dropprojects();
+dropclients();
 console.log("Dropped");

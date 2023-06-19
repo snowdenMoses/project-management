@@ -1,9 +1,9 @@
 import { faker } from '@faker-js/faker';
-import { IProduct } from '../interface/product.interface';
+import { Iproject } from '../interface/project.interface';
 import { prisma } from '../server';
-import { IVendor } from '../interface/vendor.interface';
+import { Iclient } from '../interface/client.interface';
 
-function createRandomVendors(): IVendor {
+function createRandomclients(): Iclient {
     return {
         first_name: faker.person.firstName(),
         last_name: faker.person.lastName(),
@@ -12,31 +12,31 @@ function createRandomVendors(): IVendor {
     };
 }
 
-function createRandomProducts(vendor_id): IProduct {
+function createRandomprojects(client_id): Iproject {
     return {
-        name: faker.commerce.productName(),
-        description: faker.commerce.productDescription(),
+        name: faker.commerce.projectName(),
+        description: faker.commerce.projectDescription(),
         price: Number(faker.commerce.price()),
-        vendor_id: vendor_id,
+        client_id: client_id,
     };
 }
 
-async function createVendors(callback) {
-    const vendors: IVendor[] = faker.helpers.multiple(createRandomVendors, {
+async function createclients(callback) {
+    const clients: Iclient[] = faker.helpers.multiple(createRandomclients, {
         count: 20,
     });
-    await prisma.vendor.createMany({ data: vendors })
+    await prisma.client.createMany({ data: clients })
     callback()
 }
-async function createProducts() {
+async function createprojects() {
     console.log("Starting.......")
-    const allVendors = await prisma.vendor.findMany()
-    const arrayOfVendorsId = allVendors.map(vendor => vendor.id)
-    for (let i = 0; i < arrayOfVendorsId.length; i++) {
-        await prisma.product.create({
-            data: createRandomProducts(arrayOfVendorsId[i])
+    const allclients = await prisma.client.findMany()
+    const arrayOfclientsId = allclients.map(client => client.id)
+    for (let i = 0; i < arrayOfclientsId.length; i++) {
+        await prisma.project.create({
+            data: createRandomprojects(arrayOfclientsId[i])
         })
     }
     console.log("Completed!!!!")
 }
-createVendors(createProducts)
+createclients(createprojects)

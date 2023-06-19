@@ -1,2 +1,2 @@
 -- DropIndex
-DROP INDEX "products_price_key";
+DROP INDEX "projects_price_key";

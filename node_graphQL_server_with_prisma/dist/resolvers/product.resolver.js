@@ -9,26 +9,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Product = void 0;
+exports.project = void 0;
 const server_1 = require("../server");
-const vendorsLoader_1 = require("../helperMethods/vendorsLoader");
-exports.Product = {
-    vendor(parent, args, ctx, info) {
-        // return prisma.vendor.findUnique({where:{id: parent.vendor_id}})
-        return vendorsLoader_1.cacheUser.load(parent.vendor_id);
+const clientsLoader_1 = require("../helperMethods/clientsLoader");
+exports.project = {
+    client(parent, args, ctx, info) {
+        // return prisma.client.findUnique({where:{id: parent.client_id}})
+        return clientsLoader_1.cacheUser.load(parent.client_id);
     },
     categories(parent, args, ctx, info) {
         return __awaiter(this, void 0, void 0, function* () {
             const parent_id = parent.id;
-            const category_product = yield server_1.prisma.$queryRaw `
+            const category_project = yield server_1.prisma.$queryRaw`
             SELECT categories.name, categories.id
-            FROM categories_products
-            JOIN categories ON  categories.id  = categories_products.category_id
-            JOIN products ON  products.id = categories_products.product_id
-            WHERE products.id = ${parent_id}
+            FROM categories_projects
+            JOIN categories ON  categories.id  = categories_projects.category_id
+            JOIN projects ON  projects.id = categories_projects.project_id
+            WHERE projects.id = ${parent_id}
             ;
              `;
-            return category_product;
+            return category_project;
         });
     }
 };

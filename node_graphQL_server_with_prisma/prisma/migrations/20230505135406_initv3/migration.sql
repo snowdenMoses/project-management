@@ -1,21 +1,21 @@
 /*
   Warnings:
 
-  - You are about to drop the `product` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `vendor` table. If the table is not empty, all the data it contains will be lost.
+  - You are about to drop the `project` table. If the table is not empty, all the data it contains will be lost.
+  - You are about to drop the `client` table. If the table is not empty, all the data it contains will be lost.
 
 */
 -- DropForeignKey
-ALTER TABLE "product" DROP CONSTRAINT "product_vendor_id_fkey";
+ALTER TABLE "project" DROP CONSTRAINT "project_client_id_fkey";
 
 -- DropTable
-DROP TABLE "product";
+DROP TABLE "project";
 
 -- DropTable
-DROP TABLE "vendor";
+DROP TABLE "client";
 
 -- CreateTable
-CREATE TABLE "vendors" (
+CREATE TABLE "clients" (
     "id" TEXT NOT NULL,
     "first_name" TEXT NOT NULL,
     "last_name" TEXT NOT NULL,
@@ -24,27 +24,27 @@ CREATE TABLE "vendors" (
     "updated_at" TIMESTAMP(3) NOT NULL,
     "password" TEXT NOT NULL,
 
-    CONSTRAINT "vendors_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "clients_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "products" (
+CREATE TABLE "projects" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "price" INTEGER NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
-    "vendor_id" TEXT NOT NULL,
+    "client_id" TEXT NOT NULL,
 
-    CONSTRAINT "products_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "projects_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "vendors_email_key" ON "vendors"("email");
+CREATE UNIQUE INDEX "clients_email_key" ON "clients"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "products_price_key" ON "products"("price");
+CREATE UNIQUE INDEX "projects_price_key" ON "projects"("price");
 
 -- AddForeignKey
-ALTER TABLE "products" ADD CONSTRAINT "products_vendor_id_fkey" FOREIGN KEY ("vendor_id") REFERENCES "vendors"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "projects" ADD CONSTRAINT "projects_client_id_fkey" FOREIGN KEY ("client_id") REFERENCES "clients"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

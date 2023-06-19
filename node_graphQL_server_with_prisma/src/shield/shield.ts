@@ -14,8 +14,8 @@ const isAuthenticated = rule()((parent, args, { currenUserId }) => {
 export const permissions = shield({
     Query: {
         // Allow all authenticated users to access the 'hello' query
-        currentVendor: isAuthenticated,
-        vendors: isAuthenticated,
+        currentclient: isAuthenticated,
+        clients: isAuthenticated,
 
         // Allow only admins to access the 'secret' query
         // secret: isAdmin,

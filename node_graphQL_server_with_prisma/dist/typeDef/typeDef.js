@@ -4,13 +4,13 @@ exports.typeDefs = void 0;
 exports.typeDefs = `#graphql
 scalar Upload
 type Query{
-    vendor(id: String): Vendor
-    vendors: [Vendor]
-    products: [Product]
-    currentVendor: Vendor
+    client(id: String): client
+    clients: [client]
+    projects: [project]
+    currentclient: client
     categories: [Category]
 }
-type Vendor{
+type client{
     id: String
     first_name: String
     last_name: String
@@ -18,47 +18,47 @@ type Vendor{
     created_at: String
     updated_at: String
     password: String
-    products: [Product]
+    projects: [project]
 }
 
-type Product{
+type project{
     id: String
     name: String
     description: String
     price: Int
     created_at: String
     updated_at: String
-    vendor: Vendor
+    client: client
     categories: [Category]
 }
 type Image{
     id: String
     url: String
-    product: Product
+    project: project
     created_at: String
     updated_at: String
 }
 type Category{
     id: String
     name: String
-    products: [Product]
+    projects: [project]
     created_at: String
     updated_at: String
 }
-type CategoryProduct{
+type Categoryproject{
     id: String
     category: [Category]
-    product: [Product]
+    project: [project]
     created_at: String
     updated_at: String
 }
 
 type Mutation{
-    createVendor(data: createVendorInput): Vendor
-    createProduct(vendor_id: String , data: createProductInput): Product
-    deleteProduct(id: String): Product
-    updateVendor(id: String, data: updateVendorInput): Vendor
-    login(data: vendorLoginInput): Token
+    createclient(data: createclientInput): client
+    createproject(client_id: String , data: createprojectInput): project
+    deleteproject(id: String): project
+    updateclient(id: String, data: updateclientInput): client
+    login(data: clientLoginInput): Token
     createCategory(data: CreateCategoryInput): CategoryPayload
     uploadFile(file: Upload!): File!
 }
@@ -68,7 +68,7 @@ type File{
     encoding: String
 }
 type Token{
-    vendorDetails: Vendor
+    clientDetails: client
     token: String
     message: String
 }
@@ -89,18 +89,18 @@ type CategoryPayload{
 #     count: Int
 # }
 
-input createVendorInput{
+input createclientInput{
     first_name: String
     last_name: String
     email: String
     password: String
 }
 
-input createProductInput{
+input createprojectInput{
     name: String
     description: String
     price: Int
-    # vendor_id: String
+    # client_id: String
     imageFile: Upload
     categories: [String]!
 }
@@ -108,12 +108,12 @@ input CreateCategoryInput{
     name: String
 }
 
-input vendorLoginInput{
+input clientLoginInput{
     password: String
     email: String
 }
 
-input updateVendorInput{
+input updateclientInput{
     first_name: String
     last_name: String
     email: String

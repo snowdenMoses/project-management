@@ -15,20 +15,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.cacheUser = void 0;
 const dataloader_1 = __importDefault(require("dataloader"));
 const server_1 = require("./server");
-function batchVendorFn(ids) {
+function batchclientFn(ids) {
     return __awaiter(this, void 0, void 0, function* () {
-        const vendors = yield server_1.prisma.vendor.findMany({
+        const clients = yield server_1.prisma.client.findMany({
             where: {
                 id: {
                     in: ids
                 }
             }
         });
-        const vendorsMap = vendors.reduce((map, currentVendor) => {
-            map[currentVendor.id] = currentVendor;
+        const clientsMap = clients.reduce((map, currentclient) => {
+            map[currentclient.id] = currentclient;
             return map;
         }, {});
-        return ids.map(id => vendorsMap[id]);
+        return ids.map(id => clientsMap[id]);
     });
 }
-exports.cacheUser = new dataloader_1.default(batchVendorFn);
+exports.cacheUser = new dataloader_1.default(batchclientFn);
