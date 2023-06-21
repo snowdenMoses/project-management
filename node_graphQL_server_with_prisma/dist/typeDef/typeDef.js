@@ -2,15 +2,14 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.typeDefs = void 0;
 exports.typeDefs = `#graphql
-scalar Upload
 type Query{
-    client(id: String): client
-    clients: [client]
-    projects: [project]
-    currentclient: client
-    categories: [Category]
+    client(id: String): Client
+    clients: [Client]
+    projects: [Project]
+    project(id: String): Project
+    currentClient: Client
 }
-type client{
+type Client{
     id: String
     first_name: String
     last_name: String
@@ -18,94 +17,47 @@ type client{
     created_at: String
     updated_at: String
     password: String
-    projects: [project]
+    phone_number: String
+    projects: [Project]
 }
 
-type project{
+type Project{
     id: String
     name: String
     description: String
-    price: Int
+    duration: Int
     created_at: String
     updated_at: String
-    client: client
-    categories: [Category]
+    client: Client
 }
-type Image{
-    id: String
-    url: String
-    project: project
-    created_at: String
-    updated_at: String
-}
-type Category{
-    id: String
-    name: String
-    projects: [project]
-    created_at: String
-    updated_at: String
-}
-type Categoryproject{
-    id: String
-    category: [Category]
-    project: [project]
-    created_at: String
-    updated_at: String
-}
-
 type Mutation{
-    createclient(data: createclientInput): client
-    createproject(client_id: String , data: createprojectInput): project
-    deleteproject(id: String): project
-    updateclient(id: String, data: updateclientInput): client
+    createClient(data: createClientInput): Client
+    createProject(client_id: String , data: createProjectInput): Project
+    deleteProject(id: String): Project
+    deleteClient(id: String): Client
+    updateClient(id: String, data: updateClientInput): Client
+    updateProjectInput(id: String, data: updateProjectInput): Project
     login(data: clientLoginInput): Token
-    createCategory(data: CreateCategoryInput): CategoryPayload
-    uploadFile(file: Upload!): File!
-}
-type File{
-    filename: String
-    mimetype: String
-    encoding: String
 }
 type Token{
-    clientDetails: client
+    clientDetails: Client
     token: String
     message: String
 }
-type CategoryPayload{
-    category: Category
-    message: String
-}
-# type Image{
-#     lastModified: String
-#     lastModifiedDate: String
-#     name: String
-#     size: String
-#     type: String
-#     webkitRelativePath: String
-# }
 
-# type Subscription{
-#     count: Int
-# }
-
-input createclientInput{
+input createClientInput{
     first_name: String
     last_name: String
     email: String
     password: String
+    phone_number: String
 }
 
-input createprojectInput{
+input createProjectInput{
     name: String
     description: String
-    price: Int
-    # client_id: String
-    imageFile: Upload
-    categories: [String]!
-}
-input CreateCategoryInput{
-    name: String
+    duration: Int
+    client_id: String
 }
 
 input clientLoginInput{
@@ -113,10 +65,18 @@ input clientLoginInput{
     email: String
 }
 
-input updateclientInput{
+input updateClientInput{
     first_name: String
     last_name: String
     email: String
     password: String
+    phone_number: String
+}
+
+input updateProjectInput{
+    name: String
+    description: String
+    duration: Int
+    client_id: String
 }
 `;

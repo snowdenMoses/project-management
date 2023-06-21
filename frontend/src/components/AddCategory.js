@@ -21,8 +21,8 @@ const AddCategory = () => {
     const header = "Add A Category"
     const action = "Add Category"
 
-    const [_, __, currentVendorData] = useContext(ContextApi)
-    const vendor_id = currentVendorData?.currentVendor?.id
+    const [_, __, currentclientData] = useContext(ContextApi)
+    const client_id = currentclientData?.currentclient?.id
     const Create_Category = gql`
         mutation NewCategory($category_name: String){
         createCategory(data: {
@@ -48,7 +48,7 @@ const AddCategory = () => {
                     setFlashMessageState('success')
                     setTimeout(() => {
                         setFlashMessageState('')
-                        // history.push("/vendor-dashboard")
+                        // history.push("/client-dashboard")
                     }, 4000)
                     setCategory_Name("")
                 })

@@ -17,7 +17,7 @@ exports.Query = {
             return yield server_1.prisma.client.findUnique({ where: { id } });
         });
     },
-    currentclient(_, __, { currenUserId }, info) {
+    currentClient(_, __, { currenUserId }, info) {
         return __awaiter(this, void 0, void 0, function* () {
             // if (currenUserId) {
             //     try {
@@ -40,11 +40,6 @@ exports.Query = {
                     created_at: "desc"
                 }
             });
-        });
-    },
-    categories() {
-        return __awaiter(this, void 0, void 0, function* () {
-            return yield server_1.prisma.category.findMany();
         });
     }
 };

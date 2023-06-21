@@ -1,6 +1,6 @@
 import { prisma } from "../server"
 import bcrypt from "bcrypt"
-import { client } from "@prisma/client";
+import { Client } from "@prisma/client";
 import jwt, { JwtPayload } from "jsonwebtoken"
 
 export const Mutation = {
@@ -18,7 +18,7 @@ export const Mutation = {
     },
 
     async login(parent, args, ctx, info) {
-        const clientDetails: client | null = await prisma.client.findUnique({
+        const clientDetails: Client | null = await prisma.client.findUnique({
             where: {
                 email: args.data.email
             }
@@ -36,9 +36,7 @@ export const Mutation = {
         const project = await prisma.project.create({
             data: {
                 client_id: args?.client_id,
-                name: args.data.name,
-                description: args.data.description,
-                price: args.data.price,
+                ...args.data
             }
         })
         return project

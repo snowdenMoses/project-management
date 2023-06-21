@@ -8,7 +8,7 @@ const httpLink = createUploadLink({
     headers: {
         Authorization: jwtToken ? `Bearer ${jwtToken}` : '',
     }
-    // uri: 'https://nodejs-production-3dd8.up.railway.app',
+    // uri: 'https://nodejs-projection-3dd8.up.railway.app',
 });
 
 const client = new ApolloClient({

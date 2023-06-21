@@ -10,15 +10,15 @@ import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 
 
-export default function Vendors(){
-  const [_,__,___,____,_____,______,vendorsLoading, vendorsError, vendorsData] = useContext(ContextApi)
-  if (vendorsLoading) return <p>Loading...</p>;
-  if (vendorsError) return <p>Error</p>;
+export default function clients() {
+  const [_, __, ___, ____, _____, ______, clientsLoading, clientsError, clientsData] = useContext(ContextApi)
+  if (clientsLoading) return <p>Loading...</p>;
+  if (clientsError) return <p>Error</p>;
 
   return (
     <>
       {
-        vendorsData.vendors.map((vendor) => (
+        clientsData.clients.map((client) => (
           <>
             <Card sx={{ maxWidth: 345 }}>
               <CardActionArea>
@@ -30,7 +30,7 @@ export default function Vendors(){
                 />
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">
-                    {vendor.first_name}
+                    {client.first_name}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
                     Lizards are a widespread group of squamate reptiles, with over 6,000
@@ -39,12 +39,12 @@ export default function Vendors(){
                 </CardContent>
               </CardActionArea>
             </Card>
-       </>
-      ))
-    }
-      
+          </>
+        ))
+      }
+
     </>
 
-   
+
   );
 }

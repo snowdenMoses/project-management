@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect} from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import CustomizedSnackbars from './CustomizedSnackbar';
 import Avatar from '@mui/material/Avatar';
@@ -17,15 +17,15 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { gql, useQuery } from '@apollo/client';
 import client from './ApolloClient';
-import {useMutation} from '@apollo/react-hooks'
+import { useMutation } from '@apollo/react-hooks'
 
 
 
 
 
 
-const AddProduct = () => {
-    const [product_name, setProduct_Name] = useState("")
+const Addproject = () => {
+    const [project_name, setproject_Name] = useState("")
     const [description, setDescription] = useState("")
     const [price, setPrice] = useState("")
     const [imageFile, setImageFile] = useState("")
@@ -34,16 +34,16 @@ const AddProduct = () => {
     const [categoriesUpload, setCategoriesUpload] = useState([])
     const [flashMessageState, setFlashMessageState] = useState()
     const [flashMessage, setFlashMessage] = useState(null)
-    const header = "Add A Product"
-    const action = "Add Product"
+    const header = "Add A project"
+    const action = "Add project"
 
-    const [_, __, currentVendorData, ___, ____, productsData,categoriesLoading,_________, categoriesData] = useContext(ContextApi)
+    const [_, __, currentclientData, ___, ____, projectsData, categoriesLoading, _________, categoriesData] = useContext(ContextApi)
     const categoriesTypes = categoriesData?.categories
-    const vendor_id = currentVendorData?.currentVendor?.id
-    const Create_Product = gql`
-        mutation NewProduct($vendor_id: String ,$product_name: String, $description: String, $price: Int, $imageFile: String, $categories: [String]!){
-        createProduct(vendor_id: $vendor_id, data: {
-            name: $product_name,
+    const client_id = currentclientData?.currentclient?.id
+    const Create_project = gql`
+        mutation Newproject($client_id: String ,$project_name: String, $description: String, $price: Int, $imageFile: String, $categories: [String]!){
+        createproject(client_id: $client_id, data: {
+            name: $project_name,
             description: $description,
             price: $price,
             imageFile: $imageFile,
@@ -53,14 +53,14 @@ const AddProduct = () => {
         }
     }
      `
-    // const [createProduct, { loading, error }] = useMutation(Create_Product);
-    const [createProduct, { data }] = useMutation(Create_Product);
+    // const [createproject, { loading, error }] = useMutation(Create_project);
+    const [createproject, { data }] = useMutation(Create_project);
     const history = useHistory()
     const theme = createTheme();
 
     const convertFileToJSON = (file) => {
-       
-        new Promise((resolve, reject)=>{
+
+        new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.onload = (e) => {
                 const dataURL = e.target.result;
@@ -70,19 +70,19 @@ const AddProduct = () => {
             };
             reader.readAsDataURL(file);
         })
-        
-       
-       
+
+
+
     };
     const handleFileInput = async (event) => {
         const file = event.target.files[0]
         const fData = new FormData()
-        fData.append("file",file)
-        fData.forEach(eachData=>{
+        fData.append("file", file)
+        fData.forEach(eachData => {
             setImageFile(eachData);
-            console.log("fData",eachData)
-    })
-        
+            console.log("fData", eachData)
+        })
+
     };
     const handleCategoryChange = (e) => {
         const catValue = e.target.value
@@ -97,23 +97,23 @@ const AddProduct = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            if (imageFile){
-                createProduct({variables: { vendor_id, product_name, description, price, imageFile, categories: categoriesUpload}})
-                .then((response) => {
-            setFlashMessage(response.data.message)
-            setFlashMessageState('success')
-            setTimeout(() => {
-                setFlashMessageState('')
-                // history.push("/vendor-dashboard")
-            }, 4000)
-            history.push("/")
-            setProduct_Name("")
-            setDescription("")
-            setPrice("")
-        
-        })
-       
-            } else  return alert("Not Present") 
+            if (imageFile) {
+                createproject({ variables: { client_id, project_name, description, price, imageFile, categories: categoriesUpload } })
+                    .then((response) => {
+                        setFlashMessage(response.data.message)
+                        setFlashMessageState('success')
+                        setTimeout(() => {
+                            setFlashMessageState('')
+                            // history.push("/client-dashboard")
+                        }, 4000)
+                        history.push("/")
+                        setproject_Name("")
+                        setDescription("")
+                        setPrice("")
+
+                    })
+
+            } else return alert("Not Present")
         }
         catch (error) {
             // const errors = error.response.data.data
@@ -128,7 +128,7 @@ const AddProduct = () => {
 
     }
 
-    useEffect(()=>{
+    useEffect(() => {
 
     })
     return (
@@ -160,13 +160,13 @@ const AddProduct = () => {
                                 margin="normal"
                                 required
                                 fullWidth
-                                id="product_name"
-                                label="Product Name"
-                                name="product_name"
-                                autoComplete="Product Name"
+                                id="project_name"
+                                label="project Name"
+                                name="project_name"
+                                autoComplete="project Name"
                                 autoFocus
-                                value={product_name}
-                                onChange={(e) => setProduct_Name(e.target.value)}
+                                value={project_name}
+                                onChange={(e) => setproject_Name(e.target.value)}
                             />
                             <TextField
                                 margin="normal"
@@ -198,21 +198,21 @@ const AddProduct = () => {
                                 margin="normal"
                                 required
                                 id="file"
-                                onChange={(e)=>{handleFileInput(e)}}
+                                onChange={(e) => { handleFileInput(e) }}
                             />
                             <FormGroup row>
                                 {categoriesLoading ? <p>Loading....</p> :
-                                categoriesTypes?.map((category) => {
-                                    return (
-                                        <FormControlLabel
-                                            value={category.id}
-                                            control={<Checkbox
-                                                onChange={(e) => {
-                                                    handleCategoryChange(e);
-                                                }} />}
-                                            label={category.name} />
-                                    )
-                                })}
+                                    categoriesTypes?.map((category) => {
+                                        return (
+                                            <FormControlLabel
+                                                value={category.id}
+                                                control={<Checkbox
+                                                    onChange={(e) => {
+                                                        handleCategoryChange(e);
+                                                    }} />}
+                                                label={category.name} />
+                                        )
+                                    })}
                             </FormGroup>
                             <Button
                                 type="submit"
@@ -230,4 +230,4 @@ const AddProduct = () => {
 
     )
 }
-export default AddProduct
+export default Addproject

@@ -21,21 +21,21 @@ const Item = styled(Paper)(({ theme }) => ({
     color: theme.palette.text.secondary,
 }));
 
-export default function AllProducts() {
-    const [_, __, ___, productsLoading, productsError, productsData] = useContext(ContextApi)
+export default function Allprojects() {
+    const [_, __, ___, projectsLoading, projectsError, projectsData] = useContext(ContextApi)
     React.useEffect(() => {
 
-    }, [productsData])
-    if (productsLoading) return <p>Loading...</p>;
-    if (productsError) return <p>Error</p>;
+    }, [projectsData])
+    if (projectsLoading) return <p>Loading...</p>;
+    if (projectsError) return <p>Error</p>;
 
-   
+
     return (
-                <Box sx={{ flexGrow: 2 }}>
-                    <Button href="/sign-in">Login</Button>
-                <Grid container spacing={2} >
+        <Box sx={{ flexGrow: 2 }}>
+            <Button href="/sign-in">Login</Button>
+            <Grid container spacing={2} >
                 {
-                    productsData.products.map((product) => (
+                    projectsData.projects.map((project) => (
                         <Grid item xs={12} sm={6} md={4} >
                             <Card sx={{ height: '100%' }}>
                                 <CardActionArea>
@@ -47,22 +47,22 @@ export default function AllProducts() {
                                     />
                                     <CardContent>
                                         <Typography gutterBottom variant="h8" component="div">
-                                            Price:{product.price}
+                                            Price:{project.price}
                                         </Typography>
                                         <Typography gutterBottom variant="h5" component="div">
-                                            {product.name}
+                                            {project.name}
                                         </Typography>
                                         <Typography variant="body2" color="text.secondary">
-                                            {product.description}
+                                            {project.description}
                                         </Typography>
                                     </CardContent>
                                 </CardActionArea>
                             </Card>
-                    </Grid>
+                        </Grid>
                     ))
                 }
-                </Grid>
-                </Box>
-                
+            </Grid>
+        </Box>
+
     );
 }

@@ -1,14 +1,14 @@
-import { prisma } from '../server';
+// import { prisma } from '../server';
 
-async function dropclients() {
-    await prisma.client.deleteMany()
-}
-async function dropprojects() {
-    await prisma.project.deleteMany()
-}
+// async function dropclients() {
+//     await prisma.client.deleteMany()
+// }
+// async function dropprojects() {
+//     await prisma.project.deleteMany()
+// }
 
-dropprojects()
-dropclients()
+// dropprojects()
+// dropclients()
 
 
-console.log("Dropped")
+// console.log("Dropped")

@@ -2,17 +2,17 @@ import React, { useState, useEffect } from 'react'
 import { useQuery, gql } from '@apollo/client';
 import ContextApi from './index'
 function Store({ children }) {
-    // const [vendorsLoading, setVendorsLoading] = useState()
-    // const [vendorsError, setVendorsError] = useState()
-    // const [vendorsData, setVendorsData] = useState([])
-    // const [currentVendorLoading, setCurrentVendorLoading] = useState()
-    // const [currentVendorError, setCurrentVendorError] = useState()
-    // const [currentVendorData, setCurrentVendorData] = useState([])
+    // const [clientsLoading, setclientsLoading] = useState()
+    // const [clientsError, setclientsError] = useState()
+    // const [clientsData, setclientsData] = useState([])
+    // const [currentclientLoading, setCurrentclientLoading] = useState()
+    // const [currentclientError, setCurrentclientError] = useState()
+    // const [currentclientData, setCurrentclientData] = useState([])
 
-// function GetAllVendors(){
-    const GET_Vendors = gql`
+    // function GetAllclients(){
+    const GET_CLIENTS = gql`
             query {
-                vendors {
+                clients {
                 created_at
                 last_name
                 first_name
@@ -22,52 +22,41 @@ function Store({ children }) {
                 }
             }
         `;
-    const { loading: vendorsLoading, error: vendorsError, data: vendorsData } = useQuery(GET_Vendors)
-    const vendorsDetailsArray = [vendorsLoading, vendorsError, vendorsData]
+    const { loading: clientsLoading, error: clientsError, data: clientsData } = useQuery(GET_CLIENTS)
+    const clientsDetailsArray = [clientsLoading, clientsError, clientsData]
 
-    const GET_products = gql`
+    const GET_PROJECTS = gql`
             query {
-                products {
+                projects {
                 name
                 description
-                price
-                vendor{
+                duration
+                client{
                     first_name
                     last_name
                 }
                 }
             }
         `;
-    const { loading: productsLoading, error: productsError, data: productsData } = useQuery(GET_products)
-    const productsDetailsArray = [productsLoading, productsError, productsData]
+    const { loading: projectsLoading, error: projectsError, data: projectsData } = useQuery(GET_PROJECTS)
+    const projectsDetailsArray = [projectsLoading, projectsError, projectsData]
 
 
-    const CURRENT_Vendor = gql`
+    const CURRENT_CLIENT = gql`
             query {
-            currentVendor {
+            currentClient {
                 first_name
                 email
                 id
             }
             }
         `;
-    const { loading: currentVendorLoading, error: currentVendorError, data: currentVendorData } = useQuery(CURRENT_Vendor)
-    const currentVendorDetailsArray = [currentVendorLoading, currentVendorError, currentVendorData]
-    
-    const Get_Categories = gql`
-            query {
-            categories {
-                name
-                id
-            }
-            }
-        `;
-    const { loading: categoriesLoading, error: categoriesError, data: categoriesData } = useQuery(Get_Categories)
-    const CategoriesDetailsArray = [categoriesLoading, categoriesError, categoriesData]
+    const { loading: currentClientLoading, error: currentClientError, data: currentClientData } = useQuery(CURRENT_CLIENT)
+    const currentClientDetailsArray = [currentClientLoading, currentClientError, currentClientData]
 
-   
+
     return (
-        <ContextApi.Provider value={[...currentVendorDetailsArray, ...productsDetailsArray, ...CategoriesDetailsArray, ...vendorsDetailsArray]}>
+        <ContextApi.Provider value={[...currentClientDetailsArray, ...projectsDetailsArray, ...clientsDetailsArray]}>
             {children}
         </ContextApi.Provider>
     )

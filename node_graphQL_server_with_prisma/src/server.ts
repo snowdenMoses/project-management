@@ -1,7 +1,6 @@
 import { ApolloServer } from "@apollo/server";
 import { PrismaClient } from "@prisma/client";
 import { expressMiddleware } from '@apollo/server/express4';
-import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
 import express from 'express';
 import http from 'http';
 import { json, text } from 'body-parser';

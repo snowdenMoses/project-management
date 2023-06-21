@@ -1,10 +1,10 @@
 export const typeDefs = `#graphql
-scalar Upload
 type Query{
     client(id: String): Client
     clients: [Client]
     projects: [Project]
-    currentclient: Client
+    project(id: String): Project
+    currentClient: Client
 }
 type Client{
     id: String
@@ -14,6 +14,7 @@ type Client{
     created_at: String
     updated_at: String
     password: String
+    phone_number: String
     projects: [Project]
 }
 
@@ -21,20 +22,22 @@ type Project{
     id: String
     name: String
     description: String
-    price: Int
+    duration: Int
     created_at: String
     updated_at: String
     client: Client
 }
 type Mutation{
-    createClient(data: createclientInput): client
-    createProject(client_id: String , data: createprojectInput): project
-    deleteProject(id: String): project
-    updateClient(id: String, data: updateclientInput): client
+    createClient(data: createClientInput): Client
+    createProject(client_id: String , data: createProjectInput): Project
+    deleteProject(id: String): Project
+    deleteClient(id: String): Client
+    updateClient(id: String, data: updateClientInput): Client
+    updateProjectInput(id: String, data: updateProjectInput): Project
     login(data: clientLoginInput): Token
 }
 type Token{
-    clientDetails: client
+    clientDetails: Client
     token: String
     message: String
 }
@@ -44,15 +47,14 @@ input createClientInput{
     last_name: String
     email: String
     password: String
+    phone_number: String
 }
 
 input createProjectInput{
     name: String
     description: String
-    price: Int
-    # client_id: String
-    imageFile: Upload
-    categories: [String]!
+    duration: Int
+    client_id: String
 }
 
 input clientLoginInput{
@@ -65,5 +67,13 @@ input updateClientInput{
     last_name: String
     email: String
     password: String
+    phone_number: String
+}
+
+input updateProjectInput{
+    name: String
+    description: String
+    duration: Int
+    client_id: String
 }
 `
