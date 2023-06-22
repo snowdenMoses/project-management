@@ -37,7 +37,7 @@ const server = new server_1.ApolloServer({
 function serverFunction() {
     return __awaiter(this, void 0, void 0, function* () {
         yield server.start();
-        app.use((0, cors_1.default)(), (0, body_parser_1.json)(), (0, body_parser_1.text)({ type: 'application/graphql' }), (0, express4_1.expressMiddleware)(server, {
+        app.use((0, cors_1.default)(), (0, body_parser_1.json)(), (0, express4_1.expressMiddleware)(server, {
             context: ({ req }) => __awaiter(this, void 0, void 0, function* () {
                 const bearerToken = String(req.headers.authorization);
                 const token = bearerToken.split("Bearer ")[1];
@@ -48,7 +48,7 @@ function serverFunction() {
             }),
         }));
         yield new Promise((resolve) => httpServer.listen({ port }, resolve));
-        console.log(`🚀 Server ready at http://localhost:4000`);
+        console.log(`🚀 Server ready at ${process.env.HOST}`);
     });
 }
 serverFunction();

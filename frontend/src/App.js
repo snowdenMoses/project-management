@@ -1,14 +1,14 @@
 import SignIn from './components/Authentication/SignIn';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Container from '@mui/material/Container';
-import Addproject from './components/Addproject';
-import clients from './components/clients';
+import Addproject from './components/AddProject';
+import clients from './components/Clients';
 import AuthorizationComponent from './components/Authorization/AuthorizationRoute';
-import clientDashboard from './components/clientDashboard';
+import ClientDashboard from './components/ClientDashboard';
 import './App.css';
 import Store from './components/contextApi/store';
-import Allprojects from './components/Allprojects';
 import AddCategory from './components/AddCategory';
+import HomePage from './components/HomePage';
 
 
 function App() {
@@ -18,15 +18,16 @@ function App() {
         <Router>
           <Switch>
             <Route exact path='/'>
-              <Allprojects />
+              <HomePage />
             </Route>
             <Route path='/sign-in'>
               <SignIn />
             </Route>
+            <Route path='/client-dashboard'>
+              <ClientDashboard />
+            </Route>
             <AuthorizationComponent>
-              <Route path='/client-dashboard'>
-                <clientDashboard />
-              </Route>
+              
               <Route path='/add-project'>
                 <Addproject />
               </Route>

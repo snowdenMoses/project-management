@@ -15,14 +15,16 @@ services:
     frontend:
         build:
           context: ./frontend
+        volumes:
+          - /app/node_modules
+          - ./frontend:/app
     api:
         build:
           context: ./node_graphQL_server_with_prisma
         depends_on:
           - db
-        command: npx prisma migrate dev
-        # environment:
-        #   DATABASE_URL: DATABASE_URL
+        # command: >
+        #   bash "npx prisma migrate dev"
     nginx:
         build:
             context: ./nginx

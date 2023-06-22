@@ -30,7 +30,6 @@ async function serverFunction() {
     app.use(
         cors(),
         json(),
-        text({ type: 'application/graphql' }),
         expressMiddleware(server, {
             context: async ({ req }) => {
                 const bearerToken = String(req.headers.authorization)
@@ -43,6 +42,6 @@ async function serverFunction() {
         }),
     );
     await new Promise<void>((resolve) => httpServer.listen({ port }, resolve));
-    console.log(`🚀 Server ready at http://localhost:4000`);
+    console.log(`🚀 Server ready at ${process.env.HOST}`);
 }
 serverFunction()

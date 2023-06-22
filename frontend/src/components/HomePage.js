@@ -11,6 +11,9 @@ import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
+import HourglassDisabledIcon from '@mui/icons-material/HourglassDisabled';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import ArticleIcon from '@mui/icons-material/Article';
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -21,18 +24,26 @@ const Item = styled(Paper)(({ theme }) => ({
     color: theme.palette.text.secondary,
 }));
 
-export default function Allprojects() {
+export default function HomePage() {
     const [_, __, ___, projectsLoading, projectsError, projectsData] = useContext(ContextApi)
     React.useEffect(() => {
 
     }, [projectsData])
+    console.log("Data", projectsData);
     if (projectsLoading) return <p>Loading...</p>;
     if (projectsError) return <p>Error</p>;
 
 
     return (
         <Box sx={{ flexGrow: 2 }}>
-            <Button href="/sign-in">Login</Button>
+            <div >
+                <HourglassDisabledIcon />
+                <span>
+                    Project Management
+                </span>
+            </div>
+            <Button variant="contained" href="/sign-in" className='createButton'><PersonAddIcon /> Add Client</Button>
+            <Button variant="contained" href="/sign-in" className='createButton'><ArticleIcon /> New Project</Button>
             <Grid container spacing={2} >
                 {
                     projectsData.projects.map((project) => (

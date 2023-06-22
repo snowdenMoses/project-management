@@ -36,10 +36,6 @@ mutation($email: String!, $password: String!){
 
 
 function Copyright(props) {
-
-
-
-
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
@@ -74,6 +70,7 @@ export default function SignIn() {
     event.preventDefault();
     login({ variables: { email, password } })
       .then((response) => {
+        console.log("response", response);
         localStorage.setItem("jwtToken", response.data.login.token)
         setFlashMessage(response.data.login.message)
         setFlashMessageState('success')
@@ -151,10 +148,6 @@ export default function SignIn() {
                 onChange={(e) => handlePasswordChange(e)}
                 autoComplete="current-password"
               />
-              {/* <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            /> */}
               <Button
                 type="submit"
                 fullWidth

@@ -10,11 +10,11 @@ import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 
 
-export default function clients() {
-  const [_, __, ___, ____, _____, ______, clientsLoading, clientsError, clientsData] = useContext(ContextApi)
+export default function Clients() {
+  const [_, __, clientsLoading, clientsError, clientsData] = useContext(ContextApi)
+  
   if (clientsLoading) return <p>Loading...</p>;
   if (clientsError) return <p>Error</p>;
-
   return (
     <>
       {

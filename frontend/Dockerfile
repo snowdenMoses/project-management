@@ -11,14 +11,13 @@ COPY . .
 Run npm run build
 
 FROM nginx
+
 # for multicontainer docker
-EXPOSE 3000
+EXPOSE 80
 
 # for single container docker
 # EXPOSE 80
 
 # for multicontainer docker using nginx routing
 COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
-
-
-# COPY --from=builder /app/build  /usr/share/nginx/html
+COPY --from=builder /app/build  /usr/share/nginx/html
