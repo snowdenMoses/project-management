@@ -10,6 +10,7 @@ type Client{
     id: String
     first_name: String
     last_name: String
+    role: String
     email: String
     created_at: String
     updated_at: String
@@ -22,6 +23,7 @@ type Project{
     id: String
     name: String
     description: String
+    status: String
     duration: Int
     created_at: String
     updated_at: String
@@ -48,6 +50,7 @@ input createClientInput{
     email: String
     password: String
     phone_number: String
+    role: String
 }
 
 input createProjectInput{
@@ -55,6 +58,7 @@ input createProjectInput{
     description: String
     duration: Int
     client_id: String
+    status: String
 }
 
 input clientLoginInput{
@@ -68,6 +72,7 @@ input updateClientInput{
     email: String
     password: String
     phone_number: String
+    role: String
 }
 
 input updateProjectInput{
@@ -75,5 +80,6 @@ input updateProjectInput{
     description: String
     duration: Int
     client_id: String
+    status: String
 }
 `
