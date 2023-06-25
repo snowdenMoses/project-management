@@ -28,14 +28,16 @@ type Project{
     created_at: String
     updated_at: String
     client: Client
+    message: String
 }
+
 type Mutation{
     createClient(data: createClientInput): Client
     createProject(client_id: String , data: createProjectInput): Project
     deleteProject(id: String): Project
     deleteClient(id: String): Client
     updateClient(id: String, data: updateClientInput): Client
-    updateProjectInput(id: String, data: updateProjectInput): Project
+    updateProject(project_id: String, data: updateProjectInput): Project
     login(data: clientLoginInput): Token
 }
 type Token{
@@ -73,6 +75,7 @@ input updateClientInput{
     password: String
     phone_number: String
     role: String
+    status: String
 }
 
 input updateProjectInput{

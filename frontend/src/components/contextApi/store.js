@@ -28,10 +28,14 @@ function Store({ children }) {
     const GET_PROJECTS = gql`
             query {
                 projects {
+                id
                 name
                 description
                 duration
+                created_at
+                status
                 client{
+                    id
                     first_name
                     last_name
                 }

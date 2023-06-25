@@ -66,4 +66,16 @@ export const Mutation = {
         })
         return client
     },
+    async updateProject(parent, args, ctx, info) {
+        const projectExist = await prisma.project.findUnique({ where: { id: args.project_id } })
+        if (!projectExist) throw new Error("project does not exist")
+        const project = await prisma.project.update({
+            where: {
+                id: args.project_id
+            }, data: {
+                ...args.data
+            }
+        })
+        return {...project, message: "Successfully Updated"}
+    },
 }

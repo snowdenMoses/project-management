@@ -85,4 +85,17 @@ exports.Mutation = {
             return client;
         });
     },
+    updateProject(parent, args, ctx, info) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const projectExist = yield server_1.prisma.project.findUnique({ where: { id: args.project_id } });
+            if (!projectExist)
+                throw new Error("project does not exist");
+            const project = yield server_1.prisma.project.update({
+                where: {
+                    id: args.project_id
+                }, data: Object.assign({}, args.data)
+            });
+            return Object.assign(Object.assign({}, project), { message: "Successfully Updated" });
+        });
+    },
 };
