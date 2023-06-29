@@ -39,6 +39,8 @@ export default function HomePage() {
     const handleCreateProjectModalClose = () => setCreateProjectModalState(false);
     const handleClose = () => setOpen(false);
     const [_, __, ___, projectsLoading, projectsError, projectsData] = useContext(ContextApi)
+
+
     React.useEffect(() => {
 
     }, [projectsData])

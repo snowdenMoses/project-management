@@ -9,16 +9,21 @@ import './App.css';
 import Store from './components/contextApi/store';
 import AddCategory from './components/AddCategory';
 import HomePage from './components/HomePage';
-
+import ContextTestingComp from './components/ContextTestingComp';
+import {Context2} from './components/contextApi/store2';
 
 function App() {
   return (
     <Container>
       <Store>
+        <Context2>
         <Router>
           <Switch>
             <Route exact path='/'>
               <HomePage />
+            </Route>
+            <Route exact path='/testing'>
+              <ContextTestingComp />
             </Route>
             <Route path='/sign-in'>
               <SignIn />
@@ -37,6 +42,7 @@ function App() {
             </AuthorizationComponent>
           </Switch>
         </Router>
+        </Context2>
       </Store>
     </Container>
   );
