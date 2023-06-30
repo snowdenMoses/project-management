@@ -38,14 +38,10 @@ export default function HomePage() {
     const handleCreateClientModalClose = () => setCreateClientModalState(false);
     const handleCreateProjectModalClose = () => setCreateProjectModalState(false);
     const handleClose = () => setOpen(false);
-    const [_, __, ___, projectsLoading, projectsError, projectsData] = useContext(ContextApi)
-
-
-    React.useEffect(() => {
-
-    }, [projectsData])
-    if (projectsLoading) return <p>Loading...</p>;
-    if (projectsError) return <p>Error</p>;
+    const {projectsDetails} = useContext(ContextApi)
+   
+    if (projectsDetails[0]) return <p>Loading...</p>;
+    if (projectsDetails[1]) return <p>Error</p>;
 
 
     return (
@@ -90,7 +86,7 @@ export default function HomePage() {
             </div>
             <Grid container spacing={2} >
                 {
-                    projectsData.projects.map((project) => {
+                    projectsDetails[2].projects.map((project) => {
                         const from = moment(new Date(Number(project.created_at))).format("MMMM Do YYYY")
                         const to = moment(new Date(Number(project.created_at))).add(project.duration, 'd')
                         const projectManager = `${project.client.first_name} ${project.client.last_name}`

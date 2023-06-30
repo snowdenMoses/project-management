@@ -18,10 +18,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
-
-
-
-
+import { GET_CLIENTS, GET_PROJECTS} from './contextApi/store';
 
 
 const Addproject = ({handleClose, individualProjectData, editButtonClicked, setIndividualProjectData}) => {
@@ -34,6 +31,8 @@ const Addproject = ({handleClose, individualProjectData, editButtonClicked, setI
     const [flashMessage, setFlashMessage] = useState(null)
     const header = editButtonClicked ? "Update Project" : "Add A Project"
     const action = editButtonClicked ? "Update Project" : "Add Project"
+
+   
     useState(() => {
         if (editButtonClicked) {
           setDuration(individualProjectData.duration);
@@ -41,12 +40,12 @@ const Addproject = ({handleClose, individualProjectData, editButtonClicked, setI
           setDescription(individualProjectData.description);
         }
       }, [editButtonClicked]);
-
-    console.log("individualProjectData", individualProjectData);
-
-    const [_, __, currentclientData, ___, ____, projectsData, categoriesLoading, _________, categoriesData] = useContext(ContextApi)
-    const client_id = currentclientData?.currentclient?.id
-    const Create_project = gql`
+    
+    const {currentClientDetails, projectsDetails, clientsDetails} = useContext(ContextApi)
+    const client_id = currentClientDetails[2]?.currentclient?.id
+   
+    // console.log("GET_PROJECTS", GET_PROJECTS);
+   const Create_project = gql`
         mutation Newproject($client_id: String ,$projectName: String, $description: String, $duration: Int, $status: String){
         createProject(client_id: $client_id, data: {
             name: $projectName,
@@ -73,17 +72,7 @@ const Addproject = ({handleClose, individualProjectData, editButtonClicked, setI
         }
     }
      `
-    const GET_CLIENTS = gql`
-        query {
-        clients{
-            id
-            first_name
-        }
-    }
-     `
-
-    const { loading: clientLoading, error: clientError, data: clientData } = useQuery(GET_CLIENTS)
-    const [createproject, { data }] = useMutation(Create_project);
+    const [createProject, { data }] = useMutation(Create_project);
     const [updateProject, { data: projectData }] = useMutation(UPDATE_PROJECT);
     const history = useHistory()
     const theme = createTheme();
@@ -95,7 +84,16 @@ const Addproject = ({handleClose, individualProjectData, editButtonClicked, setI
         e.preventDefault()
         try {
             if(!editButtonClicked){
-                createproject({ variables: { client_id: client, projectName, description, duration, status} })
+                createProject({ variables: { client_id: client, projectName, description, duration, status},
+                //////// refetchQueries: [{query: GET_PROJECTS}, {query: GET_CLIENTS}] 
+                update(cache, {data: {createProject}}){
+                    const { projects } = cache.readQuery({ query: GET_PROJECTS});
+                    cache.writeQuery({
+                        query: GET_PROJECTS,
+                        data: {projects: [...projects, createProject ]}
+                    })
+                } 
+            })
                     .then((response) => {
                         setFlashMessage(response.data.message)
                         setFlashMessageState('success')
@@ -111,7 +109,16 @@ const Addproject = ({handleClose, individualProjectData, editButtonClicked, setI
                     })
                 }
                 else{
-                    updateProject({ variables: { project_id: individualProjectData.id, client_id: client, projectName, description, duration, status} })
+                    updateProject({ variables: { project_id: individualProjectData.id, client_id: client, projectName, description, duration, status},
+                        // update(cache, {data: {updateProject}}){
+                        //     const { projects } = cache.readQuery({ query: GET_PROJECTS});
+                        //     cache.writeQuery({
+                        //         query: GET_PROJECTS,
+                        //         data: {projects: [...projects, updateProject ]}
+                        //     })
+                        // }
+                        refetchQueries: [{query: GET_PROJECTS, variables:{project_id: individualProjectData.id}}]
+                     })
                         .then((response) => {
                             setFlashMessage(response.data.message)
                             setFlashMessageState('success')
@@ -139,12 +146,6 @@ const Addproject = ({handleClose, individualProjectData, editButtonClicked, setI
         }
 
     }
-
-    useEffect(() => {
-
-    })
-    console.log("individualProjectData", individualProjectData?.client_first_name);
-    console.log("projectData", projectData);
     return (
         <>
             {flashMessageState && flashMessage !== null ?
@@ -225,7 +226,7 @@ const Addproject = ({handleClose, individualProjectData, editButtonClicked, setI
                                     onChange={(e)=> handleClientChange(e)}
                                     required
                                 >
-                                {clientData.clients.map(client=> <MenuItem value={client.id}> {client.first_name} </MenuItem>) }
+                                {clientsDetails[2].clients.map(client=> <MenuItem value={client.id}> {client.first_name} </MenuItem>) }
                                 </Select>
                             </FormControl>
                             <FormControl fullWidth margin="dense">

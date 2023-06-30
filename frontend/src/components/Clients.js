@@ -12,13 +12,16 @@ import { CardActionArea } from '@mui/material';
 
 export default function Clients() {
   const [_, __, clientsLoading, clientsError, clientsData] = useContext(ContextApi)
+  const {clientsDetails} = useContext(ContextApi)
+  console.log(clientsDetails);
+
   
-  if (clientsLoading) return <p>Loading...</p>;
-  if (clientsError) return <p>Error</p>;
+  if (clientsDetails.clientsDetails[0]) return <p>Loading...</p>;
+  if (clientsDetails.clientsDetails[1]) return <p>Error</p>;
   return (
     <>
       {
-        clientsData.clients.map((client) => (
+        clientsDetails[2].clients.map((client) => (
           <>
             <Card sx={{ maxWidth: 345 }}>
               <CardActionArea>

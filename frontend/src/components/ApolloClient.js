@@ -2,6 +2,25 @@ import { ApolloClient, InMemoryCache } from '@apollo/client';
 import { createUploadLink } from 'apollo-upload-client';
 
 
+
+const cache = new InMemoryCache({
+    typePolicies:{
+        Query:{
+            fields:{
+                clients:{
+                    merge(existing, incoming){
+                        return incoming
+                    }
+                },
+                projects:{
+                    merge(existing, incoming){
+                        return incoming
+                    }
+                }
+            }
+        }
+    }
+})
 const jwtToken = localStorage.getItem('jwtToken');
 const httpLink = createUploadLink({
     // uri: "http://localhost:80/api/",
@@ -13,7 +32,7 @@ const httpLink = createUploadLink({
 
 const client = new ApolloClient({
     link: httpLink,
-    cache: new InMemoryCache(),
+    cache: cache,
 });
 
 export default client

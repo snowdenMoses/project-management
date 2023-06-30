@@ -7,16 +7,15 @@ import AuthorizationComponent from './components/Authorization/AuthorizationRout
 import ClientDashboard from './components/ClientDashboard';
 import './App.css';
 import Store from './components/contextApi/store';
-import AddCategory from './components/AddCategory';
 import HomePage from './components/HomePage';
 import ContextTestingComp from './components/ContextTestingComp';
-import {Context2} from './components/contextApi/store2';
+// import {Context2} from './components/contextApi/store2';
 
 function App() {
   return (
     <Container>
       <Store>
-        <Context2>
+        {/* <Context2> */}
         <Router>
           <Switch>
             <Route exact path='/'>
@@ -31,18 +30,18 @@ function App() {
             <Route path='/client-dashboard'>
               <ClientDashboard />
             </Route>
+            <Route path='*'>
+              <ClientDashboard /> 
+            </Route>
             <AuthorizationComponent>
               
               <Route path='/add-project'>
                 <Addproject />
               </Route>
-              <Route path='/add-category'>
-                <AddCategory />
-              </Route>
             </AuthorizationComponent>
           </Switch>
         </Router>
-        </Context2>
+        {/* </Context2> */}
       </Store>
     </Container>
   );

@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { useQuery, gql } from '@apollo/client';
 import ContextApi from './index'
+
+export let GET_CLIENTS;
+export let GET_PROJECTS;
 function Store({ children }) {
     // const [clientsLoading, setclientsLoading] = useState()
     // const [clientsError, setclientsError] = useState()
@@ -10,7 +13,7 @@ function Store({ children }) {
     // const [currentclientData, setCurrentclientData] = useState([])
 
     // function GetAllclients(){
-    const GET_CLIENTS = gql`
+    GET_CLIENTS = gql`
             query {
                 clients {
                 created_at
@@ -23,9 +26,9 @@ function Store({ children }) {
             }
         `;
     const { loading: clientsLoading, error: clientsError, data: clientsData } = useQuery(GET_CLIENTS)
-    const clientsDetailsArray = [clientsLoading, clientsError, clientsData]
+    const clientsDetails = [clientsLoading, clientsError, clientsData]
 
-    const GET_PROJECTS = gql`
+    GET_PROJECTS = gql`
             query {
                 projects {
                 id
@@ -43,7 +46,7 @@ function Store({ children }) {
             }
         `;
     const { loading: projectsLoading, error: projectsError, data: projectsData } = useQuery(GET_PROJECTS)
-    const projectsDetailsArray = [projectsLoading, projectsError, projectsData]
+    const projectsDetails = [projectsLoading, projectsError, projectsData]
 
 
     const CURRENT_CLIENT = gql`
@@ -56,13 +59,16 @@ function Store({ children }) {
             }
         `;
     const { loading: currentClientLoading, error: currentClientError, data: currentClientData } = useQuery(CURRENT_CLIENT)
-    const currentClientDetailsArray = [currentClientLoading, currentClientError, currentClientData]
+    const currentClientDetails = [currentClientLoading, currentClientError, currentClientData]
 
 
     return (
-        <ContextApi.Provider value={[...currentClientDetailsArray, ...projectsDetailsArray, ...clientsDetailsArray]}>
+        <ContextApi.Provider value={
+            {currentClientDetails, projectsDetails, clientsDetails}
+            }>
             {children}
         </ContextApi.Provider>
     )
 }
+
 export default Store
