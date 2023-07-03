@@ -36,7 +36,7 @@
 .flash_message {
   padding-top: 0px;
   position: absolute;
-  left: 10px;
+  right: 10px;
   top: 5px
 }
 
@@ -57,6 +57,10 @@
 }
 
 .createClientButton {
+  margin-right: 10px;
+}
+
+.adminMenuButton {
   margin-right: 10px;
 }
 
@@ -105,6 +109,39 @@
 .projectDuration {
   color: red
 }
+
+.modalBox {
+  border-radius: 10px;
+  outline: hidden;
+}
+
+.subLink {
+  display: flex;
+  justify-content: space-between;
+}
+
+.auth {
+  display: flex;
+  justify-content: space-between;
+}
+
+.logInButton {
+  margin-right: 10px;
+}
+
+.errorMessage {
+  color: red;
+}
+
+/* .adminMenuButton {
+  display: red;
+}
+
+.adminMenuCloseButton {
+  color: red;
+} */
+
+
 
 
 

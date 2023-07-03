@@ -5,14 +5,7 @@ import ContextApi from './index'
 export let GET_CLIENTS;
 export let GET_PROJECTS;
 function Store({ children }) {
-    // const [clientsLoading, setclientsLoading] = useState()
-    // const [clientsError, setclientsError] = useState()
-    // const [clientsData, setclientsData] = useState([])
-    // const [currentclientLoading, setCurrentclientLoading] = useState()
-    // const [currentclientError, setCurrentclientError] = useState()
-    // const [currentclientData, setCurrentclientData] = useState([])
-
-    // function GetAllclients(){
+    
     GET_CLIENTS = gql`
             query {
                 clients {
@@ -55,6 +48,7 @@ function Store({ children }) {
                 first_name
                 email
                 id
+                role
             }
             }
         `;

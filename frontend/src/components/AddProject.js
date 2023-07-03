@@ -21,14 +21,23 @@ import FormControl from '@mui/material/FormControl';
 import { GET_CLIENTS, GET_PROJECTS} from './contextApi/store';
 
 
-const Addproject = ({handleClose, individualProjectData, editButtonClicked, setIndividualProjectData}) => {
+
+const Addproject = ({
+    handleClose, 
+    individualProjectData, 
+    editButtonClicked, 
+    setIndividualProjectData, 
+    setShowSuccessMessage,
+    setFlashMessage
+
+}) => {
+
     const [projectName, setProjectName] = useState("")
     const [description, setDescription] = useState("")
     const [duration, setDuration] = useState()
-    const [client, setClient] = useState("")
+    const [clientId, setClientId] = useState("")
     const [status, setStatus] = useState("TODO")
-    const [flashMessageState, setFlashMessageState] = useState()
-    const [flashMessage, setFlashMessage] = useState(null)
+    const [projectErrorMessage, setProjectErrorMessage] = useState()
     const header = editButtonClicked ? "Update Project" : "Add A Project"
     const action = editButtonClicked ? "Update Project" : "Add Project"
 
@@ -38,16 +47,17 @@ const Addproject = ({handleClose, individualProjectData, editButtonClicked, setI
           setDuration(individualProjectData.duration);
           setProjectName(individualProjectData.name);
           setDescription(individualProjectData.description);
+          setStatus(individualProjectData.status);
+          setClientId(individualProjectData.client_id)
         }
       }, [editButtonClicked]);
     
-    const {currentClientDetails, projectsDetails, clientsDetails} = useContext(ContextApi)
-    const client_id = currentClientDetails[2]?.currentclient?.id
-   
-    // console.log("GET_PROJECTS", GET_PROJECTS);
+   const { clientsDetails} = useContext(ContextApi)
+
    const Create_project = gql`
-        mutation Newproject($client_id: String ,$projectName: String, $description: String, $duration: Int, $status: String){
-        createProject(client_id: $client_id, data: {
+        mutation Newproject($client_id: String! ,$projectName: String!, $description: String!, $duration: Int!, $status: String){
+        createProject(data: {
+            client_id: $client_id,
             name: $projectName,
             description: $description,
             duration: $duration,
@@ -59,7 +69,7 @@ const Addproject = ({handleClose, individualProjectData, editButtonClicked, setI
     }`
 
     const UPDATE_PROJECT = gql`
-        mutation updateProject($project_id: String, $client_id: String ,$projectName: String, $description: String, $duration: Int, $status: String){
+        mutation updateProject($project_id: String, $client_id: String! ,$projectName: String!, $description: String!, $duration: Int!, $status: String!){
             updateProject(project_id: $project_id, data: {
             name: $projectName,
             description: $description,
@@ -73,87 +83,72 @@ const Addproject = ({handleClose, individualProjectData, editButtonClicked, setI
     }
      `
     const [createProject, { data }] = useMutation(Create_project);
-    const [updateProject, { data: projectData }] = useMutation(UPDATE_PROJECT);
+    const [updateProject, { data: projectData }] = useMutation(UPDATE_PROJECT)
     const history = useHistory()
     const theme = createTheme();
    
     const handleClientChange = (e) => {
-        setClient(e.target.value)
+        setClientId(e.target.value)
     }
     const handleSubmit = async (e) => {
         e.preventDefault()
-        try {
             if(!editButtonClicked){
-                createProject({ variables: { client_id: client, projectName, description, duration, status},
-                //////// refetchQueries: [{query: GET_PROJECTS}, {query: GET_CLIENTS}] 
-                update(cache, {data: {createProject}}){
-                    const { projects } = cache.readQuery({ query: GET_PROJECTS});
-                    cache.writeQuery({
-                        query: GET_PROJECTS,
-                        data: {projects: [...projects, createProject ]}
+                        createProject({ variables: { client_id: clientId, projectName, description, duration, status},
+                                        onCompleted: () => {
+                                            setShowSuccessMessage(true)
+                                            setTimeout(()=>{
+                                                setShowSuccessMessage(false)
+                                            }, 5000)
+                                           
+                                            setFlashMessage("Successfully Updated")
+                                        },
+                                        update(cache, {data: {createProject}}){
+                                            const { projects } = cache.readQuery({ query: GET_PROJECTS});
+                                            cache.writeQuery({
+                                                query: GET_PROJECTS,
+                                                data: {projects: [...projects, createProject ]}
+                                            })
+                                        } 
                     })
-                } 
-            })
                     .then((response) => {
-                        setFlashMessage(response.data.message)
-                        setFlashMessageState('success')
-                        setTimeout(() => {
-                            setFlashMessageState('')
-                        }, 4000)
                         setProjectName("")
                         setDescription("")
                         setDuration("")
                         setStatus("")
-                        setClient("")
-
+                        setClientId("")
+                        handleClose()
+                    }).catch(err=>{
+                        setProjectErrorMessage(err.graphQLErrors[0].message)
                     })
                 }
                 else{
-                    updateProject({ variables: { project_id: individualProjectData.id, client_id: client, projectName, description, duration, status},
-                        // update(cache, {data: {updateProject}}){
-                        //     const { projects } = cache.readQuery({ query: GET_PROJECTS});
-                        //     cache.writeQuery({
-                        //         query: GET_PROJECTS,
-                        //         data: {projects: [...projects, updateProject ]}
-                        //     })
-                        // }
+                    updateProject({ variables: { project_id: individualProjectData.id, client_id: clientId, projectName, description, duration, status},
+                        onCompleted: () => {
+                            setShowSuccessMessage(true)
+                            setTimeout(()=>{
+                                setShowSuccessMessage(false)
+                            }, 3000)
+                            setFlashMessage("Successfully Updated")
+                        },
                         refetchQueries: [{query: GET_PROJECTS, variables:{project_id: individualProjectData.id}}]
                      })
                         .then((response) => {
-                            setFlashMessage(response.data.message)
-                            setFlashMessageState('success')
-                            setTimeout(() => {
-                                setFlashMessageState('')
-                            }, 4000)
                             setProjectName("")
                             setDescription("")
                             setDuration("")
                             setStatus("")
-                            setClient("")
-    
+                            setClientId("")
+                            handleClose()
+                            // setShowSuccessMessage(true)
+                        }).catch(err=>{
+                            setProjectErrorMessage(err.graphQLErrors[0].message)
                         })
                     }
-        }
-        catch (error) {
-            // const errors = error.response.data.data
-            // for (error in errors) {
-            //     setFlashMessage(error + " " + errors[error][0])
-            //     setFlashMessageState('error')
-            //     setTimeout(() => {
-            //         setFlashMessageState('')
-            //     }, 4000)
-            // }
-        }
 
     }
     return (
         <>
-            {flashMessageState && flashMessage !== null ?
-                <div className='flash_message'>
-                    <CustomizedSnackbars severity={flashMessageState} message={flashMessage} />
-                </div>
-                : ""}
-            <ThemeProvider theme={theme}>
+            <ThemeProvider theme={theme} key={editButtonClicked ? individualProjectData.id : ""}>
                 <Container component="main" maxWidth="xs">
                     <CloseIcon className='closeModal' onClick={handleClose}/>
                     <CssBaseline />
@@ -182,7 +177,6 @@ const Addproject = ({handleClose, individualProjectData, editButtonClicked, setI
                                 autoComplete="Project Name"
                                 value={projectName}
                                 onChange={(e) => { 
-                                    // setIndividualProjectData(false)
                                     setProjectName(e.target.value)
                                 }}
                             />
@@ -196,7 +190,6 @@ const Addproject = ({handleClose, individualProjectData, editButtonClicked, setI
                                 autoComplete="description"
                                 value={description}
                                 onChange={(e) => {
-                                    // setIndividualProjectData(false)
                                     setDescription(e.target.value)
                                 }}
                             />
@@ -210,7 +203,6 @@ const Addproject = ({handleClose, individualProjectData, editButtonClicked, setI
                                 autoComplete="duration"
                                 value={duration}
                                 onChange={(e) => {
-                                    // setIndividualProjectData(false)
                                     setDuration(Number(e.target.value))
 
                                 
@@ -225,6 +217,8 @@ const Addproject = ({handleClose, individualProjectData, editButtonClicked, setI
                                     label="Client"
                                     onChange={(e)=> handleClientChange(e)}
                                     required
+                                    defaultValue={clientId}
+                                    
                                 >
                                 {clientsDetails[2].clients.map(client=> <MenuItem value={client.id}> {client.first_name} </MenuItem>) }
                                 </Select>
@@ -238,6 +232,7 @@ const Addproject = ({handleClose, individualProjectData, editButtonClicked, setI
                                     label="Status"
                                     onChange={(e)=> setStatus(e.target.value)}
                                     required
+                                    defaultValue={status}
                                 >
                                 <MenuItem value="TODO"> TODO </MenuItem>
                                 <MenuItem value="INPROGRESS"> IN PROGRESS </MenuItem>
@@ -253,6 +248,7 @@ const Addproject = ({handleClose, individualProjectData, editButtonClicked, setI
                             >
                                 {action}
                             </Button>
+                            {projectErrorMessage ? <Typography variant = "body2" className='errorMessage'> { projectErrorMessage } </Typography> : ""}
                         </Box>
                     </Box>
                 </Container>

@@ -11,7 +11,7 @@ services:
         ports:
           - "5432:5432"
         volumes:
-          - pg-datafolderv2:/var/lib/postgresql/data
+          - pg-datafolderv3:/var/lib/postgresql/data
     frontend:
         build:
           context: ./frontend
@@ -23,8 +23,6 @@ services:
           context: ./node_graphQL_server_with_prisma
         depends_on:
           - db
-        # command: >
-        #   bash "npx prisma migrate dev"
     nginx:
         build:
             context: ./nginx
@@ -33,10 +31,10 @@ services:
           - ./nginx/nginx.conf:/etc/nginx/nginx.conf
         restart: always
         ports:
-          - "80:80"
+          - "5002:80"
         depends_on:
           - api
           - frontend
 volumes:
-    pg-datafolderv2:
+    pg-datafolderv3:
     

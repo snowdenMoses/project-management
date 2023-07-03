@@ -2,9 +2,14 @@ import { prisma } from "../server"
 import bcrypt from "bcrypt"
 import { Client } from "@prisma/client";
 import jwt, { JwtPayload } from "jsonwebtoken"
+import HttpException from "../helperMethods/errorHandling"
 
 export const Mutation = {
     async createClient(parent, args, ctx, info) {
+        if(args.data.first_name == "" || args.data.last_name == "" || args.data.email == "" || args.data.password == "" || args.data.phone_number == "" )
+            {
+                throw new HttpException(400, "Please fill in all the required fields")
+            }
         let password = ""
         args.data.password = await bcrypt.hash(args.data.password, 10);
         const emailExist = await prisma.client.findUnique({ where: { email: args.data.email } })
@@ -14,7 +19,11 @@ export const Mutation = {
                 ...args.data,
             }
         })
-        return client
+
+        const token = jwt.sign({
+            userId: client?.id
+        }, 'secret', { expiresIn: 60 * 60 });
+        return { ...client, token, message: "User created successfully" }
     },
 
     async login(parent, args, ctx, info) {
@@ -23,9 +32,9 @@ export const Mutation = {
                 email: args.data.email
             }
         })
-        if (!clientDetails) return "Please Check Your Password or Email"
+        if (!clientDetails) throw new HttpException(400, "Please Check Your Password or Email") 
         const isUser = await bcrypt.compare(args.data.password, clientDetails ? clientDetails.password : "");
-        if (!isUser) throw new Error("Login Details not correct")
+        if (!isUser) throw new HttpException(404, "Login Details are not correct")
         const token = jwt.sign({
             userId: clientDetails?.id
         }, 'secret', { expiresIn: 60 * 60 });
@@ -33,6 +42,18 @@ export const Mutation = {
         return { clientDetails, token, message: "You have successfully Logged in" }
     },
     async createProject(parent, args, ctx, info) {
+        if(args.data.duration == 0)
+            {
+                throw new HttpException(400, "Duration must be greater than 0")
+            }
+        if(args.data.name == "" || 
+            args.data.description == "" || 
+            args.data.duration == "" || 
+            args.data.status == "" || 
+            args.data.client_id == "" )
+            {
+                throw new HttpException(400, "Please fill in all the required fields")
+            }
         const project = await prisma.project.create({
             data: {
                 client_id: args?.client_id,

@@ -10,6 +10,8 @@ import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import LockIcon from '@mui/icons-material/Lock';
+import LockOpenIcon from '@mui/icons-material/LockOpen';
 import Typography from '@mui/material/Typography';
 import Alert from '@mui/material/Alert';
 import Container from '@mui/material/Container';
@@ -18,6 +20,7 @@ import { useMutation, useQuery, gql } from '@apollo/client';
 import Profile from '../Profile';
 import { useHistory } from 'react-router-dom'
 import CustomizedSnackbars from '../CustomizedSnackbar';
+import CloseIcon from '@mui/icons-material/Close';
 
 const LOGIN_MUTATION = gql`
 mutation($email: String!, $password: String!){
@@ -39,8 +42,8 @@ function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
+      <Link color="inherit" href="#">
+        Project Management
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -50,9 +53,10 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-export default function SignIn() {
+export default function SignIn({setLoginModalState}) {
   const [email, setEmail] = useState()
   const [password, setPassword] = useState()
+  const [loginErrorMessage, setLoginErrorMessage] = useState()
   const [flashMessageState, setFlashMessageState] = useState()
   const [flashMessage, setFlashMessage] = useState(null)
 
@@ -70,31 +74,19 @@ export default function SignIn() {
     event.preventDefault();
     login({ variables: { email, password } })
       .then((response) => {
-        console.log("response", response);
         localStorage.setItem("jwtToken", response.data.login.token)
-        setFlashMessage(response.data.login.message)
-        setFlashMessageState('success')
-        setTimeout(() => {
-          setFlashMessageState('')
-          if (response?.data?.login) {
-            history.push({
-              pathname: "/client-dashboard",
-              state: {
-                client_id: response.data.login.clientDetails.id,
-                login_message: response.data.login.message
-              }
-            })
-          }
-        }, 2000)
+        setLoginModalState(false)
+        window.location.reload();
 
       }).catch(errors => {
-        for (error in errors) {
-          setFlashMessage(error + " " + errors[error][0])
-          setFlashMessageState('error')
-          setTimeout(() => {
-            setFlashMessageState('')
-          }, 4000)
-        }
+        setLoginErrorMessage(errors.graphQLErrors[0].message);
+        // for (error in errors) {
+        //   setFlashMessage(error + " " + errors[error][0])
+        //   setFlashMessageState('error')
+        //   setTimeout(() => {
+        //     setFlashMessageState('')
+        //   }, 4000)
+        // }
       }
       )
   };
@@ -110,6 +102,9 @@ export default function SignIn() {
         : ""}
       <ThemeProvider theme={theme}>
         <Container component="main" maxWidth="xs">
+        <CloseIcon className='closeModal' onClick={()=>{
+          setLoginModalState(false)
+        }}/>
           <CssBaseline />
           <Box
             sx={{
@@ -119,8 +114,8 @@ export default function SignIn() {
               alignItems: 'center',
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-              <LockOutlinedIcon />
+            <Avatar sx={{ m: 1, bgcolor: '#1976D2' }}>
+              <LockOpenIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
               Sign in
@@ -156,18 +151,7 @@ export default function SignIn() {
               >
                 Sign In
               </Button>
-              <Grid container>
-                <Grid item xs>
-                  <Link href="#" variant="body2">
-                    Forgot password?
-                  </Link>
-                </Grid>
-                <Grid item>
-                  <Link href="#" variant="body2">
-                    {"Don't have an account? Sign Up"}
-                  </Link>
-                </Grid>
-              </Grid>
+              {loginErrorMessage ? <Typography variant = "body2" className='errorMessage'> { loginErrorMessage } </Typography> : ""}
             </Box>
           </Box>
           <Copyright sx={{ mt: 8, mb: 4 }} />

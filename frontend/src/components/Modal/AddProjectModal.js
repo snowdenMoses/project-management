@@ -18,7 +18,16 @@ const style = {
   p: 4,
 };
 
-export default function AddProjectModal({  open, handleClose, editButtonClicked, individualProjectData, setIndividualProjectData}) {
+export default function AddProjectModal({  
+  open, 
+  handleClose, 
+  editButtonClicked, 
+  individualProjectData, 
+  setIndividualProjectData,
+  setShowSuccessMessage,
+  setFlashMessage,
+  isSignUp
+}) {
   return (
     <div>
       <Modal
@@ -33,6 +42,9 @@ export default function AddProjectModal({  open, handleClose, editButtonClicked,
           editButtonClicked = {editButtonClicked} 
           individualProjectData = {individualProjectData} 
           setIndividualProjectData = {setIndividualProjectData}
+          setShowSuccessMessage = { setShowSuccessMessage }
+          setFlashMessage = {setFlashMessage}
+          isSignUp = {isSignUp}
           />
         </Box>
       </Modal>

@@ -24,7 +24,7 @@ import FormLabel from '@mui/material/FormLabel';
 
 
 
-const AddClient = ({handleClose}) => {
+const AddClient = ({handleClose, isSignUp}) => {
     const [firstName, setFirstName] = useState("")
     const [lastName, setLastName] = useState("")
     const [email, setEmail] = useState()
@@ -33,11 +33,12 @@ const AddClient = ({handleClose}) => {
     const [phoneNumber, setPhoneNumber] = useState("")
     const [flashMessage, setFlashMessage] = useState(null)
     const [flashMessageState, setFlashMessageState] = useState()
-    const header = "Add A client"
-    const action = "Add client"
+    const [createClientErrorMessage, setCreateClientErrorMessage] = useState()
+    const header = isSignUp ? "Sign Up" : "Add A Client"
+    const action = isSignUp ? "Sign Up" : "Add Client"
 
     const CREATE_CLIENT = gql`
-        mutation Newclient($first_name: String ,$last_name: String, $email: String, $password: String, $phone_number: String, $role: String){
+        mutation Newclient($first_name: String! ,$last_name: String!, $email: String!, $password: String!, $phone_number: String, $role: String){
         createClient(data: {
             first_name: $first_name,
             last_name: $last_name,
@@ -47,8 +48,13 @@ const AddClient = ({handleClose}) => {
             role: $role,
 
         }){
+            clientDetails{
             first_name
             id
+            }
+            token
+            message
+            
         }
     }
      `
@@ -59,9 +65,9 @@ const AddClient = ({handleClose}) => {
    
     const handleSubmit = async (e) => {
         e.preventDefault()
-        try {
                 createClient({ variables: { first_name: firstName, last_name: lastName, email, phone_number: phoneNumber, password, role} })
                     .then((response) => {
+                        localStorage.setItem("jwtToken", response.data.createClient.token)
                         setFlashMessage(response.data.message)
                         setFlashMessageState('success')
                         setTimeout(() => {
@@ -74,21 +80,13 @@ const AddClient = ({handleClose}) => {
                         setPassword("")
                         setPhoneNumber("")
                         setRole("")
+                        handleClose()
+                        window.location.reload();
+                    }).catch(er=>{
+                        setCreateClientErrorMessage(er.graphQLErrors[0].message);
 
                     })
         }
-        catch (error) {
-            // const errors = error.response.data.data
-            // for (error in errors) {
-            //     setFlashMessage(error + " " + errors[error][0])
-            //     setFlashMessageState('error')
-            //     setTimeout(() => {
-            //         setFlashMessageState('')
-            //     }, 4000)
-            // }
-        }
-
-    }
 
     useEffect(() => {
 
@@ -122,6 +120,7 @@ const AddClient = ({handleClose}) => {
                         </Typography>
                         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }} >
                             <TextField
+                                error = { !firstName ? true : false }
                                 margin="dense"
                                 required
                                 fullWidth
@@ -133,6 +132,7 @@ const AddClient = ({handleClose}) => {
                                 onChange={(e) => setFirstName(e.target.value)}
                             />
                             <TextField
+                                error = { !lastName ? true : false }
                                 margin="dense"
                                 required
                                 fullWidth
@@ -144,6 +144,7 @@ const AddClient = ({handleClose}) => {
                                 onChange={(e) => setLastName(e.target.value)}
                             />
                             <TextField
+                                error = { !email ? true : false }
                                 margin="dense"
                                 required
                                 fullWidth
@@ -156,6 +157,7 @@ const AddClient = ({handleClose}) => {
                             />
 
                             <TextField
+                                error = { !password ? true : false }
                                 margin="dense"
                                 required
                                 fullWidth
@@ -168,6 +170,7 @@ const AddClient = ({handleClose}) => {
                             />
 
                             <TextField
+                                error = { !phoneNumber ? true : false }
                                 margin="dense"
                                 required
                                 fullWidth
@@ -198,6 +201,7 @@ const AddClient = ({handleClose}) => {
                             >
                                 {action}
                             </Button>
+                            {createClientErrorMessage ? <Typography variant = "body2" className='errorMessage'> { createClientErrorMessage } </Typography> : ""}
                         </Box>
                     </Box>
                 </Container>

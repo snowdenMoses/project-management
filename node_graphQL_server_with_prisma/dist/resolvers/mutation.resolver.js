@@ -16,9 +16,13 @@ exports.Mutation = void 0;
 const server_1 = require("../server");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const errorHandling_1 = __importDefault(require("../helperMethods/errorHandling"));
 exports.Mutation = {
     createClient(parent, args, ctx, info) {
         return __awaiter(this, void 0, void 0, function* () {
+            if (args.data.first_name == "" || args.data.last_name == "" || args.data.email == "" || args.data.password == "" || args.data.phone_number == "") {
+                throw new errorHandling_1.default(400, "Please fill in all the required fields");
+            }
             let password = "";
             args.data.password = yield bcrypt_1.default.hash(args.data.password, 10);
             const emailExist = yield server_1.prisma.client.findUnique({ where: { email: args.data.email } });
@@ -27,7 +31,10 @@ exports.Mutation = {
             const client = yield server_1.prisma.client.create({
                 data: Object.assign({}, args.data)
             });
-            return client;
+            const token = jsonwebtoken_1.default.sign({
+                userId: client === null || client === void 0 ? void 0 : client.id
+            }, 'secret', { expiresIn: 60 * 60 });
+            return Object.assign(Object.assign({}, client), { token, message: "User created successfully" });
         });
     },
     login(parent, args, ctx, info) {
@@ -38,10 +45,10 @@ exports.Mutation = {
                 }
             });
             if (!clientDetails)
-                return "Please Check Your Password or Email";
+                throw new errorHandling_1.default(400, "Please Check Your Password or Email");
             const isUser = yield bcrypt_1.default.compare(args.data.password, clientDetails ? clientDetails.password : "");
             if (!isUser)
-                throw new Error("Login Details not correct");
+                throw new errorHandling_1.default(404, "Login Details are not correct");
             const token = jsonwebtoken_1.default.sign({
                 userId: clientDetails === null || clientDetails === void 0 ? void 0 : clientDetails.id
             }, 'secret', { expiresIn: 60 * 60 });
@@ -50,6 +57,16 @@ exports.Mutation = {
     },
     createProject(parent, args, ctx, info) {
         return __awaiter(this, void 0, void 0, function* () {
+            if (args.data.duration == 0) {
+                throw new errorHandling_1.default(400, "Duration must be greater than 0");
+            }
+            if (args.data.name == "" ||
+                args.data.description == "" ||
+                args.data.duration == "" ||
+                args.data.status == "" ||
+                args.data.client_id == "") {
+                throw new errorHandling_1.default(400, "Please fill in all the required fields");
+            }
             const project = yield server_1.prisma.project.create({
                 data: Object.assign({ client_id: args === null || args === void 0 ? void 0 : args.client_id }, args.data)
             });

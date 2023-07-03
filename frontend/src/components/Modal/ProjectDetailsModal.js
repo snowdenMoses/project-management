@@ -18,26 +18,26 @@ const style = {
   p: 4,
 };
 
-export default function ProjectDetailsModal({open, handleClose, individualProjectData }) {
+export default function ProjectDetailsModal({ open, handleClose, individualProjectData }) {
 
   return (
     <div className='projectDetailContainer'>
-      
+
       <Modal
         open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style} >
-        <CloseIcon className='closePojectDetails' onClick={handleClose}/>
+        <Box sx={style}  className="modalBox">
+          <CloseIcon className='closePojectDetails' onClick={handleClose} />
           <h2> Project Details </h2>
-          <Typography> Name: { individualProjectData?.name }</Typography>
-          <Typography> Description: { individualProjectData?.description }</Typography>
-          <Typography> Duration: { individualProjectData?.duration } days</Typography>
-          <Typography> Manager: { individualProjectData?.projectManager }</Typography>
-          <Typography> From: { individualProjectData?.from }</Typography>
-          <Typography> To: { individualProjectData?.to }</Typography>
+          <Typography> Name: {individualProjectData?.name}</Typography>
+          <Typography> Description: {individualProjectData?.description}</Typography>
+          <Typography> Duration: {individualProjectData?.duration} days</Typography>
+          <Typography> Manager: {individualProjectData?.projectManager}</Typography>
+          <Typography> From: {individualProjectData?.from}</Typography>
+          <Typography> To: {individualProjectData?.to}</Typography>
         </Box>
       </Modal>
     </div>

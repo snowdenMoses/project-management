@@ -35,7 +35,7 @@ type Project{
 }
 
 type Mutation{
-    createClient(data: createClientInput): Client
+    createClient(data: createClientInput): Token
     createProject(client_id: String , data: createProjectInput): Project
     deleteProject(id: String): Project
     deleteClient(id: String): Client
@@ -50,19 +50,19 @@ type Token{
 }
 
 input createClientInput{
-    first_name: String
-    last_name: String
-    email: String
-    password: String
+    first_name: String!
+    last_name: String!
+    email: String!
+    password: String!
     phone_number: String
     role: String
 }
 
 input createProjectInput{
-    name: String
-    description: String
-    duration: Int
-    client_id: String
+    name: String!
+    description: String!
+    duration: Int!
+    client_id: String!
     status: String
 }
 
