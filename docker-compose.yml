@@ -4,14 +4,14 @@ services:
         build:
           context: ./db
         environment:
-          POSTGRES_PASSWORD: example
+          POSTGRES_PASSWORD: "1234"
           POSTGRES_USERNAME: postgres
           POSTGRES_DATABASE: project_management
         restart: always
         ports:
           - "5432:5432"
         volumes:
-          - pg-datafolderv3:/var/lib/postgresql/data
+          - pg-datafolderv5:/var/lib/postgresql/data
     frontend:
         build:
           context: ./frontend
@@ -36,5 +36,5 @@ services:
           - api
           - frontend
 volumes:
-    pg-datafolderv3:
+    pg-datafolderv5:
     
