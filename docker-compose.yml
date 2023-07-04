@@ -5,13 +5,14 @@ services:
           context: ./db
         environment:
           POSTGRES_HOST_AUTH_METHOD: trust
-          POSTGRES_USERNAME: postgres
-          POSTGRES_DATABASE: project_management
+          POSTGRES_USER: postgres
+          POSTGRES_DB: project_management
+          POSTGRES_PASSWORD: 1234
         restart: always
         ports:
           - "5432:5432"
         volumes:
-          - pg-datafolderv5:/var/lib/postgresql/data
+          - pg-datafolderv6:/var/lib/postgresql/data
     frontend:
         build:
           context: ./frontend
@@ -36,5 +37,5 @@ services:
           - api
           - frontend
 volumes:
-    pg-datafolderv5:
+    pg-datafolderv6:
     
