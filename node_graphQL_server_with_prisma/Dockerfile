@@ -10,4 +10,5 @@ COPY . .
 
 RUN npx prisma generate
 
-CMD ["npm", "run", "start:migrate:dev"]
+# CMD ["npm", "run", "start:migrate:dev"]
+CMD ["npm", "run", "start:migrate:prod"]
