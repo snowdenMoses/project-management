@@ -4,7 +4,6 @@ services:
         build:
           context: ./db
         environment:
-          POSTGRES_PASSWORD: "1234"
           POSTGRES_HOST_AUTH_METHOD: trust
           POSTGRES_USERNAME: postgres
           POSTGRES_DATABASE: project_management
