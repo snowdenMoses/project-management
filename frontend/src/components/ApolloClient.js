@@ -23,8 +23,9 @@ const cache = new InMemoryCache({
 })
 const jwtToken = localStorage.getItem('jwtToken');
 const httpLink = createUploadLink({
-    // uri: "http://localhost:80/api/",
-    uri: "http://localhost:4000",
+    uri: "http://localhost:5002/api/",
+    // uri: "157.245.253.226:5002/api/",
+    // uri: "http://localhost:4000",
     headers: {
         Authorization: jwtToken ? `Bearer ${jwtToken}` : '',
     }
