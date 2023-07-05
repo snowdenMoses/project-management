@@ -12,7 +12,7 @@ services:
         ports:
           - "5432:5432"
         volumes:
-          - pg-datafolderv7:/var/lib/postgresql/data
+          - pg-datafolderv8:/var/lib/postgresql/data
     frontend:
         build:
           context: ./frontend
@@ -37,5 +37,5 @@ services:
           - api
           - frontend
 volumes:
-    pg-datafolderv7:
+    pg-datafolderv8:
     
