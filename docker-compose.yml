@@ -19,8 +19,8 @@ services:
         volumes:
           - /app/node_modules
           - ./frontend:/app
-          - ./frontend/build:/var/www/html
-          - ./deploy/default.conf:/etc/nginx/sites-available/default
+          # - ./frontend/build:/var/www/html
+          # - ./deploy/default.conf:/etc/nginx/sites-available/default
     api:
         build:
           context: ./node_graphQL_server_with_prisma

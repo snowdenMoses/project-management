@@ -31,5 +31,4 @@ EXPOSE 80
 
 # for multicontainer docker using nginx routing
 COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
-COPY --from=builder /app/build  /var/www/html
-# COPY --from=builder /app/build  /usr/share/nginx/html
+COPY --from=builder /app/build  /usr/share/nginx/html
