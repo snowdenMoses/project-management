@@ -34,7 +34,7 @@ COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
 COPY --from=builder /app/build  /usr/share/nginx/html
 
 
-# ssl settings
+#####ssl settings
 FROM ubuntu:18.04
 
 RUN apt update -y \
